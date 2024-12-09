@@ -20,7 +20,8 @@
 #endif
 
 #include <stdio.h> /* fprintf, printf, putchars, sscanf, stderr, stdout */
-#include <stdlib.h> /* alloca, exit, EXIT_FAILURE, EXIT_SUCCESS, strtoul */
+#include <stdlib.h> /* exit, EXIT_FAILURE, EXIT_SUCCESS, strtoul */
+#include <alloca.h> /* alloca */
 #include <time.h> /* clock, CLOCKS_PER_SEC */
 
 #define RESMUST(expr) \
