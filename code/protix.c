@@ -35,9 +35,8 @@
 
 #include "mpm.h"
 
-#if !defined(MPS_OS_FR) && !defined(MPS_OS_LI) && !defined(MPS_OS_XC) \
-  && !defined(MPS_OS_CY)
-#error "protix.c is specific to MPS_OS_FR, MPS_OS_LI, MPS_OS_XC, or MPS_OS_CY"
+#if !defined(MPS_OS_FR) && !defined(MPS_OS_LI) && !defined(MPS_OS_XC)
+#error "protix.c is specific to MPS_OS_FR, MPS_OS_LI or MPS_OS_XC"
 #endif
 
 #include "vm.h"

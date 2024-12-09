@@ -260,16 +260,28 @@
 
 #elif defined(MPS_PF_CYI6GC)
 
-#include "lockix.c"     /* Posix locks */
-#include "thix.c"       /* Posix threading */
-#include "pthrdext.c"   /* Posix thread extensions */
-#include "vmix.c"       /* Posix virtual memory */
-#include "protix.c"     /* Posix protection */
-#include "protsgix.c"   /* Posix signal handling */
-#include "prmcanan.c"   /* generic architecture mutator context */
-#include "prmcix.c"     /* Posix mutator context */
-#include "prmccyi6.c"   /* x86-64 for Cygwin mutator context */
-#include "span.c"       /* generic stack probe */
+/* #include "lockix.c"     /\* Posix locks *\/ */
+/* #include "thix.c"       /\* Posix threading *\/ */
+/* #include "pthrdext.c"   /\* Posix thread extensions *\/ */
+/* #include "vmix.c"       /\* Posix virtual memory *\/ */
+/* #include "protix.c"     /\* Posix protection *\/ */
+/* #include "protsgix.c"   /\* Posix signal handling *\/ */
+/* #include "prmcanan.c"   /\* generic architecture mutator context *\/ */
+/* #include "prmcix.c"     /\* Posix mutator context *\/ */
+/* #include "prmccyi6.c"   /\* x86-64 for Cygwin mutator context *\/ */
+/* #include "span.c"       /\* generic stack probe *\/ */
+
+/* Use the Windows interface. */
+
+#include "lockw3.c"     /* Windows locks */
+#include "thw3.c"       /* Windows threading */
+#include "vmw3.c"       /* Windows virtual memory */
+#include "protw3.c"     /* Windows protection */
+#include "prmci6.c"     /* x86-64 mutator context */
+#include "prmcw3.c"     /* Windows mutator context */
+#include "prmcw3i6.c"   /* Windows on x86-64 mutator context */
+#include "spw3i6.c"     /* Windows on x86-64 stack probe */
+#include "mpsiw3.c"     /* Windows interface layer extras */
 
 #else
 

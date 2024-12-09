@@ -16,7 +16,12 @@
 #error "spw3i6.c is specific to MPS_OS_W3"
 #endif
 
+#ifndef MPS_OS_CY
 #include <stdlib.h> /* _alloca */
+#else
+#include <alloca.h>
+#define _alloca alloca
+#endif
 
 
 void StackProbe(Size depth)

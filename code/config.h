@@ -616,7 +616,7 @@
 
 /* POSIX thread extensions configuration -- see <code/pthrdext.c> */
 
-#if defined(MPS_OS_LI) || defined(MPS_OS_FR) || defined(MPS_OS_CY)
+#if defined(MPS_OS_LI) || defined(MPS_OS_FR)
 
 /* PTHREADEXT_SIGSUSPEND -- signal used to suspend a thread
  * <design/pthreadext#.impl.signals>

@@ -71,7 +71,7 @@
  * <https://docs.microsoft.com/en-gb/cpp/c-runtime-library/reference/alloca>
  */
 
-#if defined(MPS_OS_W3)
+#if defined(MPS_OS_W3) && !defined(MPS_OS_CY)
 
 #define alloca _alloca
 
