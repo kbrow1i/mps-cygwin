@@ -68,9 +68,15 @@ extern Thread ThreadRingThread(Ring threadRing);
 
 extern Arena ThreadArena(Thread thread);
 
+#ifdef MP_OS_W3
 extern Res ThreadScan(ScanState ss, Thread thread, void *stackCold,
                       mps_area_scan_t scan_area,
                       void *closure);
+#else
+extern Res ThreadScan(ScanState ss, Thread thread, Word *stackCold,
+                      mps_area_scan_t scan_area,
+                      void *closure);
+#endif
 
 extern void ThreadSetup(void);
 

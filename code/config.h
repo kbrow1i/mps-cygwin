@@ -543,7 +543,7 @@
  * <https://www.gnu.org/software/libc/manual/html_node/Feature-Test-Macros.html>
  */
 
-#if defined(MPS_OS_LI)
+#if defined(MPS_OS_LI) || defined(MPS_OS_CY)
 
 #if defined(_XOPEN_SOURCE) && _XOPEN_SOURCE < 500
 #undef _XOPEN_SOURCE

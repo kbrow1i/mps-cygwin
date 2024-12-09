@@ -256,6 +256,22 @@
 #include "spw3i6.c"     /* Windows on x86-64 stack probe */
 #include "mpsiw3.c"     /* Windows interface layer extras */
 
+/* Cygwin on x86-64 built with GCC */
+
+#elif defined(MPS_PF_CYI6GC)
+
+/* Use the Windows interface. */
+
+#include "lockw3.c"     /* Windows locks */
+#include "thw3.c"       /* Windows threading */
+#include "vmw3.c"       /* Windows virtual memory */
+#include "protw3.c"     /* Windows protection */
+#include "prmci6.c"     /* x86-64 mutator context */
+#include "prmcw3.c"     /* Windows mutator context */
+#include "prmcw3i6.c"   /* Windows on x86-64 mutator context */
+#include "spw3i6.c"     /* Windows on x86-64 stack probe */
+#include "mpsiw3.c"     /* Windows interface layer extras */
+
 #else
 
 #error "Unknown platform -- can't determine platform specific parts."

@@ -71,7 +71,7 @@
  * <https://docs.microsoft.com/en-gb/cpp/c-runtime-library/reference/alloca>
  */
 
-#if defined(MPS_OS_W3)
+#if defined(MPS_OS_W3) && !defined(MPS_OS_CY)
 
 #define alloca _alloca
 
@@ -86,7 +86,7 @@
  * This macro version may evaluate the name argument twice.
  */
 
-#if defined(MPS_OS_W3)
+#if defined(MPS_OS_W3) && !defined(MPS_OS_CY)
 
 #define setenv(name, value, overwrite) \
     (((overwrite) || !getenv(name)) ? _putenv_s(name, value) : 0)
@@ -112,7 +112,7 @@
 #error "How many beans make five?"
 #endif
 
-#if defined(MPS_OS_W3) && defined(MPS_ARCH_I6)
+#if defined(MPS_OS_W3) && defined(MPS_ARCH_I6) && !defined(MPS_OS_CY)
 #define PRIuLONGEST "llu"
 #define PRIdLONGEST "lld"
 #define SCNuLONGEST "llu"

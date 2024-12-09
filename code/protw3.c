@@ -36,6 +36,7 @@ void ProtSet(Addr base, Addr limit, AccessSet mode)
     NOTREACHED;
 }
 
+LONG WINAPI ProtSEHfilter(LPEXCEPTION_POINTERS info); /* Pacify gcc. */
 
 LONG WINAPI ProtSEHfilter(LPEXCEPTION_POINTERS info)
 {

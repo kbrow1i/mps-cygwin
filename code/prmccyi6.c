@@ -1,41 +1,30 @@
-/* mpsint.c: WIN32 MEMORY POOL SYSTEM INTERFACE LAYER EXTRAS
+/* prmccyi6.c: MUTATOR CONTEXT x64 (CYGWIN)
  *
- *  $Id$
+ * $Id$
+ * Copyright (c) 2001-2020 Ravenbrook Limited.  See end of file for license.
  *
- *  Copyright (c) 2001-2020 Ravenbrook Limited.  See end of file for license.
+ * .purpose: Implement the mutator context module. <design/prmc>.
+ *
+ *
+ * ASSUMPTIONS
+ *
+ * .sp: The stack pointer in the context is RSP.
  */
 
-#include "mpm.h"
+#include "prmcix.h"
+#include "prmci6.h"
 
-#if !defined(MPS_OS_W3)
-#error "mpsiw3.c is specific to MPS_OS_W3"
+SRCID(prmcfri6, "$Id$");
+
+#if !defined(MPS_OS_CY) || !defined(MPS_ARCH_I6)
+#error "prmccyi6.c is specific to MPS_OS_CY and MPS_ARCH_I6"
 #endif
 
-#include "mps.h"
-#include "mpswin.h"
 
-SRCID(mpsiw3, "$Id$");
-
-
-/* This is defined in protw3.c */
-extern LONG WINAPI ProtSEHfilter(LPEXCEPTION_POINTERS info);
-
-/* Pacify gcc */
-LONG mps_SEH_filter(LPEXCEPTION_POINTERS info, void **hp_o, size_t *hs_o);
-void mps_SEH_handler(void *p, size_t s);
-
-LONG mps_SEH_filter(LPEXCEPTION_POINTERS info,
-                    void **hp_o, size_t *hs_o)
+Addr MutatorContextSP(MutatorContext context)
 {
-  UNUSED(hp_o);
-  UNUSED(hs_o);
-  return ProtSEHfilter(info);
-}
-
-void mps_SEH_handler(void *p, size_t s)
-{
-  UNUSED(p); UNUSED(s);
-  NOTREACHED;
+  AVERT(MutatorContext, context);
+  return (Addr)context->ucontext->uc_mcontext.rsp;   /* .sp */
 }
 
 
