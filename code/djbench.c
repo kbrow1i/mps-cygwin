@@ -23,7 +23,8 @@
 #endif
 
 #include <stdio.h> /* fprintf, stderr */
-#include <stdlib.h> /* alloca, exit, EXIT_SUCCESS, EXIT_FAILURE */
+#include <stdlib.h> /* exit, EXIT_SUCCESS, EXIT_FAILURE */
+#include <alloca.h> /* alloca */
 #include <time.h> /* CLOCKS_PER_SEC, clock */
 
 #define DJMUST(expr) \
