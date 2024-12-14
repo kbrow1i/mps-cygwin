@@ -1,13 +1,30 @@
-The master branch contains Richard Brooksby's suggestion to build the
-MPS by using the Windows interface.  This builds and passes all the
-tests normally run on Windows.  But it fails forktest [which is not
-normally run on Cygwin with the error "child did not exit normally.
-Evidently the Windows interface is not compatible with Cygwin's fork.
-Indeed, when I build the Emacs scratch/igc branch, I get call-process
-errors and can't even get a directory listing.
+;-*-text-*-
 
-The "generic" branch uses the Posix interface, with some generic
-implementations to avoid problems with Cygwin's mmap, which doesn't
-allow remapping without unmapping first.  Ultimately, the right
-approach is either to fix Cygwin's mmap for the specific uses here, or
-else to work around the mmap problem somehow.
+This repo is a fork of the MPS repo, with the following branches:
+
+master: MPS plus this README.
+
+w3: Try Richard Brooksby's suggestion to build the MPS by using the
+Windows interface.  This builds and passes all the MPS tests normally
+run on Windows.  But it fails forktest [which is not normally run on
+Windows] with the error "child did not exit normally.  Evidently the
+Windows interface is not compatible with Cygwin's fork, which
+recreates all the mmaps in the child but doesn't know about maps
+created by direct calls to VirtualAlloc.  Indeed, when I build the
+Emacs scratch/igc branch, I get call-process errors and can't even get
+a directory listing.  See Emacs bug#74805.
+
+mmap: Try a straightforward port of the MPS to Cygwin, mostly based on
+the FreeBSD case.  An attempt to build Emacs (scratch/igc branch) with
+this port fails in vmix.c:203 with an assertion violation after an
+mmap failure.  I haven't yet debugged this, nor have I yet run the MPS
+test suite, which might yield an easier test case for debugging.  It's
+possible that there is an issue with Cygwin's 64k granularity.  [See
+how the Windows port handles this.] Or maybe the Cygwin/Linux-specific
+MAP_NORESERVE flag in the first mmap call will help.
+
+generic: Use the Posix interface, with generic implementations of some
+features, to avoid the mmap problem.  In particular, it uses malloc
+instead of mmap.  This passes all the MPS tests, and Emacs seems to
+work fine so far.  I suspect there may be some performance problems
+along the way.  I haven't yet run the Emacs test suite.
