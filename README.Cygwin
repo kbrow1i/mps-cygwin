@@ -7,21 +7,24 @@ master: MPS plus this README.
 w3: Try Richard Brooksby's suggestion to build the MPS by using the
 Windows interface.  This builds and passes all the MPS tests normally
 run on Windows.  But it fails forktest [which is not normally run on
-Windows] with the error "child did not exit normally.  Evidently the
-Windows interface is not compatible with Cygwin's fork, which
-recreates all the mmaps in the child but doesn't know about maps
-created by direct calls to VirtualAlloc.  Indeed, when I build the
-Emacs scratch/igc branch, I get call-process errors and can't even get
-a directory listing.  See Emacs bug#74805.
+Windows] with the error "child did not exit normally.  The problem is
+that the Windows interface is not compatible with Cygwin's fork.  The
+latter needs to recreate all the mmaps in the child, but Cygwin
+doesn't know about mmaps that were created by direct calls to
+VirtualAlloc.  As a result, when I build the Emacs scratch/igc branch,
+I get call-process errors and can't even get a directory listing.  See
+Emacs bug#74805.
 
 mmap: Try a straightforward port of the MPS to Cygwin, mostly based on
 the FreeBSD case.  An attempt to build Emacs (scratch/igc branch) with
 this port fails in vmix.c:203 with an assertion violation after an
-mmap failure.  I haven't yet debugged this, nor have I yet run the MPS
-test suite, which might yield an easier test case for debugging.  It's
-possible that there is an issue with Cygwin's 64k granularity.  [See
-how the Windows port handles this.] Or maybe the Cygwin/Linux-specific
-MAP_NORESERVE flag in the first mmap call will help.
+mmap failure.  The same assertion violation occurs in all 38 of the
+MPS tests.  This is due to a limitation of mmap on Cygwin.  But I
+think I know how to remove this limitation with a simple patch to
+Cygwin.  It needs more testing, but so far it looks good.  When I run
+the MPS test suite with the patched Cygwin, 37 of the 38 tests pass.
+The failing test is gapRegion.  I still need to debug that failure.  I
+want to do that before I test Emacs again.
 
 generic: Use the Posix interface, with generic implementations of some
 features, to avoid the mmap problem.  In particular, it uses malloc
