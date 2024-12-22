@@ -23,8 +23,53 @@ MPS tests.  This is due to a limitation of mmap on Cygwin.  But I
 think I know how to remove this limitation with a simple patch to
 Cygwin.  It needs more testing, but so far it looks good.  When I run
 the MPS test suite with the patched Cygwin, 37 of the 38 tests pass.
-The failing test is gapRegion.  I still need to debug that failure.  I
-want to do that before I test Emacs again.
+The failing test is arenacv, with error
+
+  gapRegion: RESOURCE: unable to obtain resources
+
+The error is triggered by the die statement at arenacv.c:356, which I
+traced to policy.c:PolicyAlloc() returning ResRESOURCE.  Note that
+there are 7 points in that function where ArenaFreeLandAlloc is
+called, and they all have to fail in order for the function to return
+ResRESOURCE.
+
+By commenting out various lines in arenacv.c:main(), I found that the
+only test that fails is
+
+  testPageTable((ArenaClass)mps_arena_class_cl(), TEST_ARENA_SIZE, block, FALSE)
+
+Moreover, adding a suitable printf() before the die statement shows
+that the failure occurs at the first iteration of the loop(s).  In
+other words, gap = 2731, offset = 0, i = 0.  [numPerPage is 2730.]
+
+There are two calls to testAllocAndIterate in testPageTable, and it's
+only the second that fails.
+
+Backtrace:
+#0  PolicyAlloc (tractReturn=0x7ffffc690, arena=0x6ffffbff0010,
+    pref=0x7ffffc870, size=178978816, pool=0x6ffffc030248) at policy.c:126
+#1  0x0000000100407842 in ArenaAlloc (baseReturn=0x7ffffc740, pref=0x7ffffc870,
+    size=178978816, pool=0x6ffffc030248) at arena.c:1092
+#2  0x0000000100451cf7 in SegAlloc (segReturn=0x7ffffc7e0,
+    klass=0x1004b8500 <ClassStaticSeg>, pref=0x7ffffc870, size=178978816,
+    pool=0x6ffffc030248, args=0x10048e100 <mps_args_none>) at seg.c:53
+#3  0x00000001004015a7 in allocAsSeg (aiReturn=0x7ffffc8d0, pref=0x7ffffc870,
+    size=178978816, pool=0x6ffffc030248) at arenacv.c:252
+#4  0x000000010040181c in testAllocAndIterate (arena=0x6ffffbff0010,
+    pool=0x6ffffc030248, pageSize=65536, numPerPage=2730,
+    allocator=0x10048e060 <allocatorSegStruct>) at arenacv.c:357
+#5  0x0000000100401da2 in testPageTable (
+    klass=0x1004b0180 <ClassStaticClientArena>, size=67108864,
+    addr=0x6ffffbff0010, zoned=0) at arenacv.c:437
+#6  0x0000000100401fb3 in main (argc=2, argv=0xa000017b0) at arenacv.c:489
+
+
+I verified via both gdb and strace that there are no calls to mmap
+prior to the error except an initial call that Cygwin uses to
+implement malloc.  And there are no calls to munmap.
+
+I don't know yet if Emacs will still work all right in practice, in
+spite of this test failure.
 
 generic: Use the Posix interface, with generic implementations of some
 features, to avoid the mmap problem.  In particular, it uses malloc
