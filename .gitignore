@@ -30,3 +30,8 @@ test/test/obj
 *~
 .#.*
 core
+*.log
+*.patch
+*.i
+test.*
+cyi6gc/
