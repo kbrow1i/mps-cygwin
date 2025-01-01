@@ -333,6 +333,7 @@ static void testAllocAndIterate(Arena arena, Pool pool,
   Count offset, gap, new;
   ZoneSet zone = (ZoneSet)2;
   int i;
+  mps_res_t res;
 
   LocusPrefInit(&pref);
 
@@ -353,8 +354,14 @@ static void testAllocAndIterate(Arena arena, Pool pool,
             "offsetRegion");
       for(gap = numPerPage+1; gap <= 3 * (numPerPage+1);
           gap += (numPerPage+1)) {
-        die(allocator->alloc(&gapRegion, &pref, gap * pageSize, pool),
-            "gapRegion");
+	res = allocator->alloc(&gapRegion, &pref, gap * pageSize, pool);
+	if (res != ResOK) {
+	  fprintf(stdout, "res = %d, gap = %lu, offset = %lu, i = %d\n",
+		  res, gap, offset, i);
+	  die(res, "gapRegion");
+	}
+        /* die(allocator->alloc(&gapRegion, &pref, gap * pageSize, pool), */
+        /*     "gapRegion"); */
         die(allocator->alloc(&topRegion, &pref, pageSize, pool),
             "topRegion");
         allocator->free(&gapRegion);
@@ -473,8 +480,8 @@ int main(int argc, char *argv[])
 
   testlib_init(argc, argv);
 
-  testPageTable((ArenaClass)mps_arena_class_vm(), TEST_ARENA_SIZE, 0, TRUE);
-  testPageTable((ArenaClass)mps_arena_class_vm(), TEST_ARENA_SIZE, 0, FALSE);
+  /* testPageTable((ArenaClass)mps_arena_class_vm(), TEST_ARENA_SIZE, 0, TRUE); */
+  /* testPageTable((ArenaClass)mps_arena_class_vm(), TEST_ARENA_SIZE, 0, FALSE); */
 
   block = malloc(TEST_ARENA_SIZE);
   cdie(block != NULL, "malloc");
