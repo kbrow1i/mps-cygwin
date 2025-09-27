@@ -38,6 +38,8 @@ only test that fails is
 
   testPageTable((ArenaClass)mps_arena_class_cl(), TEST_ARENA_SIZE, block, FALSE)
 
+at line 481 [in the unmodified arenacv.c].
+
 Moreover, adding a suitable printf() before the die statement shows
 that the failure occurs at the first iteration of the loop(s).  In
 other words, gap = 2731, offset = 0, i = 0.  [numPerPage is 2730.]
